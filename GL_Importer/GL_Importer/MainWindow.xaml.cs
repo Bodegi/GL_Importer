@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml;
 
 namespace GL_Importer
 {
@@ -25,12 +28,12 @@ namespace GL_Importer
             InitializeComponent();
         }
 
-        //Logic for picking file
+        //Logic for picking file and checking if it is proper extension
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
             var open = new System.Windows.Forms.OpenFileDialog();
-            var test = open.ShowDialog();
-            switch(test)
+            var fileInteract = open.ShowDialog();
+            switch(fileInteract)
             {
                 case System.Windows.Forms.DialogResult.OK:
                     var file = open.FileName;
@@ -49,6 +52,15 @@ namespace GL_Importer
                     txtFile.ToolTip = null;
                     break;
             }
+
+        }
+
+        private void btnTestData_Click(object sender, RoutedEventArgs e)
+        {
+            string filePath = "";
+            string worksheet = "";
+            filePath = txtFile.Text;
+            worksheet = "Sheet1";
 
         }
     }
