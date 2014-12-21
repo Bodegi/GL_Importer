@@ -39,11 +39,22 @@ namespace GL_Importer
                     var file = open.FileName;
                     txtFile.Text = file;
                     txtFile.ToolTip = file;
-                    string test2 = open.ToString();
-                    if(System.IO.Path.GetExtension(test2).ToUpper() != ".XML")
+                    string extension = "";
+                    int count = 0;
+                    count = file.IndexOf(".");
+                    extension = file.Substring(count).ToUpper();
+                    switch (extension)
                     {
-                        MessageBox.Show("Please select a valid .XML file", "Error");
-                        txtFile.Clear();
+                        case ".XML":
+                            break;
+                        case ".XLS":
+                            break;
+                        case ".XLSX":
+                            break;
+                        default:
+                            MessageBox.Show("Please select a valid .XML or .XLS file", "Error");
+                            txtFile.Clear();
+                            break;
                     }
                     break;
                 case System.Windows.Forms.DialogResult.Cancel:
@@ -57,10 +68,26 @@ namespace GL_Importer
 
         private void btnTestData_Click(object sender, RoutedEventArgs e)
         {
-            string filePath = "";
-            string worksheet = "";
-            filePath = txtFile.Text;
-            worksheet = "Sheet1";
+            string hardcoded;
+            hardcoded = @"C:\Users\Chuck\Desktop\GL Import 2010.xlsx";
+            List<string> testList = new List<string>();
+            using (SpreadsheetDocument test = SpreadsheetDocument.Open(hardcoded, false))
+            {
+                WorkbookPart workbookPart = test.WorkbookPart;
+                WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
+                SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
+                //Sheet Sheet = sheetData.Descendants<Sheet>();
+                string text;
+                foreach (Row r in sheetData.Elements<Row>())
+                {
+                    foreach (Cell c in r.Elements<Cell>())
+                    {
+                        text = c.CellValue.Text;
+                        testList.Add(text);
+                    }
+                }
+            }
+
 
         }
     }
