@@ -66,29 +66,51 @@ namespace GL_Importer
 
         }
 
+        //Logic for validating the data inside the selected file
         private void btnTestData_Click(object sender, RoutedEventArgs e)
         {
             string hardcoded;
             hardcoded = @"C:\Users\Chuck\Desktop\GL Import 2010.xlsx";
+            //Workbook will break if more than 1 worksheet
             List<string> testList = new List<string>();
+            List<JournalEntry> storage = new List<JournalEntry>();
             using (SpreadsheetDocument test = SpreadsheetDocument.Open(hardcoded, false))
             {
                 WorkbookPart workbookPart = test.WorkbookPart;
                 WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
-                SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-                //Sheet Sheet = sheetData.Descendants<Sheet>();
+
+                OpenXmlReader reader = OpenXmlReader.Create(worksheetPart);
                 string text;
-                foreach (Row r in sheetData.Elements<Row>())
+                while (reader.Read())
                 {
-                    foreach (Cell c in r.Elements<Cell>())
+                    if (reader.ElementType == typeof(CellValue))
                     {
-                        text = c.CellValue.Text;
+                        text = reader.GetText();
                         testList.Add(text);
                     }
                 }
+                
+                //WorkbookPart workbookPart = test.WorkbookPart;
+                //WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
+                //SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
+                //string text;
+                //foreach (Row r in sheetData.Elements<Row>())
+                //{
+                //    testList.Clear();
+                //    foreach(Cell c in r.Elements<Cell>())
+                //    {
+                //        if(c.DataType == "s")
+                //        {
+                            
+                //        }
+                //        text = c.CellValue.Text;
+                //        testList.Add(text);
+                //    }
+                //    JournalEntry je = new JournalEntry();
+                //    je = JournalEntry.Build(testList);
+                //    storage.Add(je);
+                //}
             }
-
-
         }
     }
 }
