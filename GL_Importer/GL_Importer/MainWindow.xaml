@@ -10,5 +10,6 @@
         <TextBox x:Name="txtFile" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="Select File" VerticalAlignment="Top" Width="240" IsEnabled="False"/>
         <Button x:Name="btnBrowse" Content="Browse" HorizontalAlignment="Left" Height="23" Margin="255,10,0,0" VerticalAlignment="Top" Width="103" Click="btnBrowse_Click"/>
         <Button x:Name="btnTestData" Content="Test Data" HorizontalAlignment="Left" Height="47" Margin="10,60,0,0" VerticalAlignment="Top" Width="136" Click="btnTestData_Click"/>
+        <ListBox x:Name="lstDebug" HorizontalAlignment="Left" Height="213" Margin="227,73,0,0" VerticalAlignment="Top" Width="180"/>
     </Grid>
 </Window>

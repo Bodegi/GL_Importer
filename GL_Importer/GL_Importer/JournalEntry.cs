@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml;
 
 namespace GL_Importer
 {
@@ -25,6 +28,14 @@ namespace GL_Importer
             return je;
         }
 
+        public static string stringConverter(WorkbookPart workBookPart, int index)
+        {
+            SharedStringItem ssi = new SharedStringItem();
+            string text = "";
+            ssi = workBookPart.SharedStringTablePart.SharedStringTable.Elements<SharedStringItem>().ElementAt(index);
+            text = ssi.InnerText;
+            return text;
+        }
 
 
         

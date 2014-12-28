@@ -69,27 +69,36 @@ namespace GL_Importer
         //Logic for validating the data inside the selected file
         private void btnTestData_Click(object sender, RoutedEventArgs e)
         {
-            string hardcoded;
-            hardcoded = @"C:\Users\Chuck\Desktop\GL Import 2010.xlsx";
-            //Workbook will break if more than 1 worksheet
-            List<string> testList = new List<string>();
-            List<JournalEntry> storage = new List<JournalEntry>();
-            using (SpreadsheetDocument test = SpreadsheetDocument.Open(hardcoded, false))
+            List<JournalEntry> JE = new List<JournalEntry>();
+            JE = Logic.Program();
+            foreach(JournalEntry j in JE)
             {
-                WorkbookPart workbookPart = test.WorkbookPart;
-                WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
+                lstDebug.Items.Add(j);
+            }
 
-                OpenXmlReader reader = OpenXmlReader.Create(worksheetPart);
-                string text;
-                while (reader.Read())
-                {
-                    if (reader.ElementType == typeof(CellValue))
-                    {
-                        text = reader.GetText();
-                        testList.Add(text);
-                    }
-                }
-                
+                //Cell cell = GetCell(worksheet, "A", 1);
+
+
+            //    using (SpreadsheetDocument test = SpreadsheetDocument.Open(hardcoded, false))
+            //{
+            //    WorkbookPart workbookPart = test.WorkbookPart;
+            //    WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
+
+            //    OpenXmlReader reader = OpenXmlReader.Create(worksheetPart);
+            //    string text;
+            //    while (reader.Read())
+            //    {
+            //        if (reader.ElementType == typeof(CellValue))
+            //        {
+            //            text = reader.GetText();
+            //            if(text != "")
+            //            {
+                            
+            //                lstDebug.Items.Add(text);
+            //            }
+            //        }
+            //    }
+
                 //WorkbookPart workbookPart = test.WorkbookPart;
                 //WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
                 //SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
@@ -110,7 +119,6 @@ namespace GL_Importer
                 //    je = JournalEntry.Build(testList);
                 //    storage.Add(je);
                 //}
-            }
         }
     }
 }
