@@ -45,14 +45,10 @@ namespace GL_Importer
                     extension = file.Substring(count).ToUpper();
                     switch (extension)
                     {
-                        case ".XML":
-                            break;
-                        case ".XLS":
-                            break;
                         case ".XLSX":
                             break;
                         default:
-                            MessageBox.Show("Please select a valid .XML or .XLS file", "Error");
+                            MessageBox.Show("Please select a valid .XLSX file", "Error");
                             txtFile.Clear();
                             break;
                     }
@@ -66,6 +62,9 @@ namespace GL_Importer
 
         }
 
+        //TODO: Add Validation for column types, create a dropdown for which sheet in the spreadsheet to select, add validation for the sheet to sumtotal of 0
+        //Add a date range for user to select for when this entry is being added, check validation for seg1(propID), seg2(GL Account), seg3(partnership ID) and validate it against the date
+
         //Logic for validating the data inside the selected file
         private void btnTestData_Click(object sender, RoutedEventArgs e)
         {
@@ -75,50 +74,6 @@ namespace GL_Importer
             {
                 lstDebug.Items.Add(j);
             }
-
-                //Cell cell = GetCell(worksheet, "A", 1);
-
-
-            //    using (SpreadsheetDocument test = SpreadsheetDocument.Open(hardcoded, false))
-            //{
-            //    WorkbookPart workbookPart = test.WorkbookPart;
-            //    WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
-
-            //    OpenXmlReader reader = OpenXmlReader.Create(worksheetPart);
-            //    string text;
-            //    while (reader.Read())
-            //    {
-            //        if (reader.ElementType == typeof(CellValue))
-            //        {
-            //            text = reader.GetText();
-            //            if(text != "")
-            //            {
-                            
-            //                lstDebug.Items.Add(text);
-            //            }
-            //        }
-            //    }
-
-                //WorkbookPart workbookPart = test.WorkbookPart;
-                //WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
-                //SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-                //string text;
-                //foreach (Row r in sheetData.Elements<Row>())
-                //{
-                //    testList.Clear();
-                //    foreach(Cell c in r.Elements<Cell>())
-                //    {
-                //        if(c.DataType == "s")
-                //        {
-                            
-                //        }
-                //        text = c.CellValue.Text;
-                //        testList.Add(text);
-                //    }
-                //    JournalEntry je = new JournalEntry();
-                //    je = JournalEntry.Build(testList);
-                //    storage.Add(je);
-                //}
         }
     }
 }

@@ -48,11 +48,17 @@ namespace GL_Importer
                 SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
                 JournalEntry je = new JournalEntry();
                 int i = 0;
+                decimal zeroBal = 0;
                 foreach(Row r in sheetData.Elements<Row>())
                 {
                     i = Convert.ToInt32((r.RowIndex.ToString()));
                     je = Logic.GetCell(r, i, workbookPart);
+                    zeroBal = zeroBal + je.Amount;
                     storage.Add(je);
+                }
+                if (zeroBal != 0)
+                {
+                    //throw exception
                 }
                 return storage;
             }
