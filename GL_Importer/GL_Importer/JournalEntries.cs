@@ -42,6 +42,17 @@ namespace GL_Importer
             return new JournalEntry();
         }
 
+        private JournalEntry GetValueAt(Row r, string colIndex, SharedStringTablePart sharedStrings)
+        {
+            return new JournalEntry();
+        }
+
+        private List<string> Validation()
+        {
+            List<string> errors = new List<string>();
+            return errors;
+        }
+
         public JournalEntries(string path)
         {
             this.Entries = new List<JournalEntry>();
