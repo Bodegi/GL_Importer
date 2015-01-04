@@ -20,6 +20,7 @@ namespace GL_Importer
 
         private JournalEntry GetValueFromRow(Row r, SharedStringTablePart sharedStrings)
         {
+
             foreach (var item in r.Elements<Cell>())
             {
                 if (item.DataType != CellValues.SharedString)
@@ -42,9 +43,10 @@ namespace GL_Importer
             return new JournalEntry();
         }
 
-        private JournalEntry GetValueAt(Row r, string colIndex, SharedStringTablePart sharedStrings)
+        private object GetValueAt(Row r, int colIndex, SharedStringTablePart sharedStrings)
         {
-            return new JournalEntry();
+            Cell cell = r.Descendants<Cell>().ElementAt(colIndex);
+            return cell.CellValue.InnerText;
         }
 
         private List<string> Validation()
@@ -62,9 +64,27 @@ namespace GL_Importer
                 WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
                 WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
                 SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
+                int i = 0; 
                 foreach (Row r in sheetData.Elements<Row>())
                 {
-                    this.GetValueFromRow(r, workbookPart.SharedStringTablePart);
+                    try
+                    {
+                        Entries.Add(new JournalEntry
+                        {
+                            seg1 = Int32.Parse(GetValueAt(r, 0, workbookPart.SharedStringTablePart).ToString()),
+                            seg2 = Int32.Parse(GetValueAt(r, 1, workbookPart.SharedStringTablePart).ToString()),
+                            seg3 = Int32.Parse(GetValueAt(r, 2, workbookPart.SharedStringTablePart).ToString()),
+                            Amount = decimal.Parse(GetValueAt(r, 3, workbookPart.SharedStringTablePart).ToString()),
+                            lineItem = GetValueAt(r, 4, workbookPart.SharedStringTablePart).ToString()
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        //TODO: REMOVE THROW AND LOG USER FRIENDLY ERROR TO DISPLAY IN THE UI
+                        throw ex;
+                    }
+
+                    //this.GetValueAt(r, i, workbookPart.SharedStringTablePart);
                 }
             }
         }
