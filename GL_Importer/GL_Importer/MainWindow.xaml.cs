@@ -71,6 +71,10 @@ namespace GL_Importer
         {
             string path = txtFile.Text;
             JournalEntries entry = new JournalEntries(path);
+            foreach(JournalEntry je in entry.Entries)
+            {
+                lstDebug.Items.Add(je.lineItem);
+            }
         }
     }
 }

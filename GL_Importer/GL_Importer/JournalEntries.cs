@@ -46,12 +46,17 @@ namespace GL_Importer
         private object GetValueAt(Row r, int colIndex, SharedStringTablePart sharedStrings)
         {
             Cell cell = r.Descendants<Cell>().ElementAt(colIndex);
+            if(cell.DataType != null && cell.DataType == CellValues.SharedString)
+            {
+                var ssi = sharedStrings.SharedStringTable.Elements<SharedStringItem>().ElementAt(Int32.Parse(cell.CellValue.InnerText));
+                return ssi.InnerText;
+            }
             return cell.CellValue.InnerText;
         }
 
-        private List<string> Validation()
+        List<string> Validation(List<string> errors, string error)
         {
-            List<string> errors = new List<string>();
+            errors.Add(error);
             return errors;
         }
 
@@ -64,6 +69,7 @@ namespace GL_Importer
                 WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
                 WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
                 SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
+                List<string> errors = new List<string>();
                 int i = 0; 
                 foreach (Row r in sheetData.Elements<Row>())
                 {
@@ -78,13 +84,13 @@ namespace GL_Importer
                             lineItem = GetValueAt(r, 4, workbookPart.SharedStringTablePart).ToString()
                         });
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
+                        string error = "Incorrect value type at row " + r.RowIndex.ToString();
+                        errors = Validation(errors, error);
+                        //throw ex;
                         //TODO: REMOVE THROW AND LOG USER FRIENDLY ERROR TO DISPLAY IN THE UI
-                        throw ex;
                     }
-
-                    //this.GetValueAt(r, i, workbookPart.SharedStringTablePart);
                 }
             }
         }
