@@ -16,5 +16,6 @@ namespace GL_Importer
         public decimal Amount { get; set; }
         public int seg2 { get; set; }
         public string lineItem { get; set; }
+        public DateTime Date { get; set; }
     }
 }

@@ -73,7 +73,18 @@ namespace GL_Importer
             JournalEntries entry = new JournalEntries(path);
             foreach(JournalEntry je in entry.Entries)
             {
-                lstDebug.Items.Add(je.lineItem);
+                lstDebug.Items.Add(je.Date);
+            }
+            if (entry.Errors != null)
+            {
+                foreach (string er in entry.Errors)
+                {
+                    lstErrors.Items.Add(er);
+                }
+            }
+            else
+            {
+                lstErrors.Items.Add("No Errors detected");
             }
         }
     }

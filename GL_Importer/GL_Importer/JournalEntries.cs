@@ -12,10 +12,12 @@ namespace GL_Importer
     public class JournalEntries
     {
         public List<JournalEntry> Entries { get; set; }
+        public List<string> Errors { get; set; }
 
         public JournalEntries()
         {
             this.Entries = new List<JournalEntry>();
+            this.Errors = new List<string>();
         }
 
         private JournalEntry GetValueFromRow(Row r, SharedStringTablePart sharedStrings)
@@ -54,22 +56,16 @@ namespace GL_Importer
             return cell.CellValue.InnerText;
         }
 
-        List<string> Validation(List<string> errors, string error)
-        {
-            errors.Add(error);
-            return errors;
-        }
-
         public JournalEntries(string path)
         {
             this.Entries = new List<JournalEntry>();
+            this.Errors = new List<string>();
 
             using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(path, false))
             {
                 WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
                 WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
                 SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-                List<string> errors = new List<string>();
                 int i = 0; 
                 foreach (Row r in sheetData.Elements<Row>())
                 {
@@ -77,17 +73,18 @@ namespace GL_Importer
                     {
                         Entries.Add(new JournalEntry
                         {
-                            seg1 = Int32.Parse(GetValueAt(r, 0, workbookPart.SharedStringTablePart).ToString()),
-                            seg2 = Int32.Parse(GetValueAt(r, 1, workbookPart.SharedStringTablePart).ToString()),
-                            seg3 = Int32.Parse(GetValueAt(r, 2, workbookPart.SharedStringTablePart).ToString()),
-                            Amount = decimal.Parse(GetValueAt(r, 3, workbookPart.SharedStringTablePart).ToString()),
-                            lineItem = GetValueAt(r, 4, workbookPart.SharedStringTablePart).ToString()
+                            Date = DateTime.Parse(GetValueAt(r, 0, workbookPart.SharedStringTablePart).ToString()),
+                            seg1 = Int32.Parse(GetValueAt(r, 1, workbookPart.SharedStringTablePart).ToString()),
+                            seg2 = Int32.Parse(GetValueAt(r, 2, workbookPart.SharedStringTablePart).ToString()),
+                            seg3 = Int32.Parse(GetValueAt(r, 3, workbookPart.SharedStringTablePart).ToString()),
+                            Amount = decimal.Parse(GetValueAt(r, 4, workbookPart.SharedStringTablePart).ToString()),
+                            lineItem = GetValueAt(r, 5, workbookPart.SharedStringTablePart).ToString()
                         });
                     }
                     catch (Exception)
                     {
                         string error = "Incorrect value type at row " + r.RowIndex.ToString();
-                        errors = Validation(errors, error);
+                        Errors.Add(error);
                         //throw ex;
                         //TODO: REMOVE THROW AND LOG USER FRIENDLY ERROR TO DISPLAY IN THE UI
                     }
