@@ -56,24 +56,49 @@ namespace GL_Importer
             return cell.CellValue.InnerText;
         }
 
+        private DateTime GetDate(double rawdate)
+        {
+            DateTime Date = DateTime.FromOADate(rawdate);
+            return Date;
+        }
+
+        private void Validation(List<JournalEntry> Entries)
+        {
+            var DateQuery = from JE in Entries group JE by JE.Date into d orderby d.Key select d;
+            foreach (var date in DateQuery)
+            {
+                decimal total = 0;
+                var query = from test in Entries where test.Date == date.Key select test;
+                foreach (var q in query)
+                {
+                    total = total + q.Amount;
+                }
+                if (total != 0)
+                {
+                    Errors.Add("Balance is not 0 for the entries on " + date.Key.ToShortDateString());
+                }
+            }
+        }
+
         public JournalEntries(string path)
         {
             this.Entries = new List<JournalEntry>();
             this.Errors = new List<string>();
+            List<DateTime> Dates = new List<DateTime>();
 
             using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(path, false))
             {
                 WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
                 WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
                 SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-                int i = 0; 
+                int i = 0;
                 foreach (Row r in sheetData.Elements<Row>())
                 {
                     try
                     {
                         Entries.Add(new JournalEntry
                         {
-                            Date = DateTime.Parse(GetValueAt(r, 0, workbookPart.SharedStringTablePart).ToString()),
+                            Date = GetDate(Double.Parse(GetValueAt(r, 0, workbookPart.SharedStringTablePart).ToString())),
                             seg1 = Int32.Parse(GetValueAt(r, 1, workbookPart.SharedStringTablePart).ToString()),
                             seg2 = Int32.Parse(GetValueAt(r, 2, workbookPart.SharedStringTablePart).ToString()),
                             seg3 = Int32.Parse(GetValueAt(r, 3, workbookPart.SharedStringTablePart).ToString()),
@@ -83,12 +108,11 @@ namespace GL_Importer
                     }
                     catch (Exception)
                     {
-                        string error = "Incorrect value type at row " + r.RowIndex.ToString();
+                        string error = "Incorrect value or format at row " + r.RowIndex.ToString();
                         Errors.Add(error);
-                        //throw ex;
-                        //TODO: REMOVE THROW AND LOG USER FRIENDLY ERROR TO DISPLAY IN THE UI
                     }
                 }
+                Validation(Entries);
             }
         }
     }

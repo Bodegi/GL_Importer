@@ -62,8 +62,7 @@ namespace GL_Importer
 
         }
 
-        //TODO: Add Validation for column types, create a dropdown for which sheet in the spreadsheet to select, add validation for the sheet to sumtotal of 0
-        //Add a date range for user to select for when this entry is being added, check validation for seg1(propID), seg2(GL Account), seg3(partnership ID) and validate it against the date
+        //TODO: Add Validation for column types, create a dropdown for which sheet in the spreadsheet to select
         //Workbook will break if more than 1 worksheet
 
         //Logic for validating the data inside the selected file
