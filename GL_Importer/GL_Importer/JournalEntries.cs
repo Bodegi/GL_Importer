@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Xml;
 
 namespace GL_Importer
 {
@@ -78,6 +78,30 @@ namespace GL_Importer
                     Errors.Add("Balance is not 0 for the entries on " + date.Key.ToShortDateString());
                 }
             }
+        }
+
+        public static void ExportToXml(List<JournalEntry> Entries)
+        {
+            string testPath = @"xmltest.xml";
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.IndentChars = ("   ");
+            XmlWriter xmlOut = XmlWriter.Create(testPath, settings);
+            xmlOut.WriteStartDocument();
+            xmlOut.WriteStartElement("GL_Import");
+            foreach(JournalEntry e in Entries)
+            {
+                xmlOut.WriteStartElement("JournalEntry");
+                xmlOut.WriteElementString("Date", e.Date.ToShortDateString());
+                xmlOut.WriteElementString("Seg1", e.seg1.ToString());
+                xmlOut.WriteElementString("Seg2", e.seg2.ToString());
+                xmlOut.WriteElementString("Seg3", e.seg3.ToString());
+                xmlOut.WriteElementString("Amount", e.Amount.ToString());
+                xmlOut.WriteElementString("Description", e.lineItem);
+                xmlOut.WriteEndElement();
+            }
+            xmlOut.WriteEndElement();
+            xmlOut.Close();
         }
 
         public JournalEntries(string path)

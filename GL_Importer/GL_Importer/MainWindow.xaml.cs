@@ -85,6 +85,7 @@ namespace GL_Importer
             {
                 lstErrors.Items.Add("No Errors detected");
             }
+            JournalEntries.ExportToXml(entry.Entries);
         }
     }
 }
