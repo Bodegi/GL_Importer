@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using System.Configuration;
 
 namespace GL_Importer
 {
@@ -116,19 +115,19 @@ namespace GL_Importer
                 WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
                 WorksheetPart worksheetPart = workbookPart.WorksheetParts.Last();
                 SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-                int cellIndex = 0;
+                ConfigHelper ConfigHelper = new ConfigHelper();
                 foreach (Row r in sheetData.Elements<Row>())
                 {
                     try
                     {
                         Entries.Add(new JournalEntry
                         {
-                            Date = GetDate(Double.Parse(GetValueAt(r, 0, workbookPart.SharedStringTablePart).ToString())),
-                            seg1 = Int32.Parse(GetValueAt(r, 0, workbookPart.SharedStringTablePart).ToString()),
-                            seg2 = Int32.Parse(GetValueAt(r, 2, workbookPart.SharedStringTablePart).ToString()),
-                            seg3 = Int32.Parse(GetValueAt(r, 3, workbookPart.SharedStringTablePart).ToString()),
-                            Amount = decimal.Parse(GetValueAt(r, 4, workbookPart.SharedStringTablePart).ToString()),
-                            lineItem = GetValueAt(r, 5, workbookPart.SharedStringTablePart).ToString()
+                            Date = GetDate(Double.Parse(GetValueAt(r, ConfigHelper.Date, workbookPart.SharedStringTablePart).ToString())),
+                            seg1 = Int32.Parse(GetValueAt(r, ConfigHelper.seg1, workbookPart.SharedStringTablePart).ToString()),
+                            seg2 = Int32.Parse(GetValueAt(r, ConfigHelper.seg2, workbookPart.SharedStringTablePart).ToString()),
+                            seg3 = Int32.Parse(GetValueAt(r, ConfigHelper.seg3, workbookPart.SharedStringTablePart).ToString()),
+                            Amount = decimal.Parse(GetValueAt(r, ConfigHelper.Amount, workbookPart.SharedStringTablePart).ToString()),
+                            lineItem = GetValueAt(r, ConfigHelper.lineItem, workbookPart.SharedStringTablePart).ToString()
                         });
                     }
                     catch (Exception)

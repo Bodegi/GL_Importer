@@ -62,30 +62,23 @@ namespace GL_Importer
 
         }
 
-        //TODO: Add Validation for column types, create a dropdown for which sheet in the spreadsheet to select
-        //Workbook will break if more than 1 worksheet
-
         //Logic for validating the data inside the selected file
         private void btnTestData_Click(object sender, RoutedEventArgs e)
         {
             string path = txtFile.Text;
             JournalEntries entry = new JournalEntries(path);
-            foreach(JournalEntry je in entry.Entries)
+            var message = "";
+            if (entry.Errors.Count != 0)
             {
-                lstDebug.Items.Add(je.Date);
-            }
-            if (entry.Errors != null)
-            {
-                foreach (string er in entry.Errors)
-                {
-                    lstErrors.Items.Add(er);
-                }
+                    message = string.Join(Environment.NewLine, entry.Errors);
+                    MessageBox.Show(message, "Errors in " + path);
             }
             else
             {
-                lstErrors.Items.Add("No Errors detected");
+                MessageBox.Show("No Errors detected", "Errors in " + path);
+                JournalEntries.ExportToXml(entry.Entries);
+                MessageBox.Show("Xml file created", "XML Creation Successfull");
             }
-            JournalEntries.ExportToXml(entry.Entries);
         }
     }
 }
