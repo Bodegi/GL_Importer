@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Configuration;
 
 namespace GL_Importer
 {
@@ -113,9 +114,9 @@ namespace GL_Importer
             using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(path, false))
             {
                 WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
-                WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
+                WorksheetPart worksheetPart = workbookPart.WorksheetParts.Last();
                 SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-                int i = 0;
+                int cellIndex = 0;
                 foreach (Row r in sheetData.Elements<Row>())
                 {
                     try
@@ -123,7 +124,7 @@ namespace GL_Importer
                         Entries.Add(new JournalEntry
                         {
                             Date = GetDate(Double.Parse(GetValueAt(r, 0, workbookPart.SharedStringTablePart).ToString())),
-                            seg1 = Int32.Parse(GetValueAt(r, 1, workbookPart.SharedStringTablePart).ToString()),
+                            seg1 = Int32.Parse(GetValueAt(r, 0, workbookPart.SharedStringTablePart).ToString()),
                             seg2 = Int32.Parse(GetValueAt(r, 2, workbookPart.SharedStringTablePart).ToString()),
                             seg3 = Int32.Parse(GetValueAt(r, 3, workbookPart.SharedStringTablePart).ToString()),
                             Amount = decimal.Parse(GetValueAt(r, 4, workbookPart.SharedStringTablePart).ToString()),
