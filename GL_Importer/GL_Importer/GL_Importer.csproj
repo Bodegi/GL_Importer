@@ -68,6 +68,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ConfigHelper.cs" />
     <Compile Include="JournalEntries.cs" />
     <Compile Include="JournalEntry.cs" />
     <Compile Include="MainWindow.xaml.cs">
